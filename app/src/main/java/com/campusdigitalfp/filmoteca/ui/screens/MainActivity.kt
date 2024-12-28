@@ -1,4 +1,4 @@
-package com.campusdigitalfp.filmoteca
+package com.campusdigitalfp.filmoteca.ui.screens
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -19,12 +19,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             FilmotecaTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                AboutScreen()
             }
         }
     }
