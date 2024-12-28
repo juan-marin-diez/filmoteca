@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Filmoteca</string>
+    <string name="created_by">Creado por Juan Marín Díez</string>
+    <string name="go_to_website">Ir al sitio web</string>
+    <string name="get_support">Obtener soporte</string>
+    <string name="go_back">Volver</string>
+    <string name="functionality_not_implemented">Funcionalidad sin implementar</string>
 </resources>

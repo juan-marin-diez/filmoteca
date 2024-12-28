@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -24,6 +25,7 @@ import com.campusdigitalfp.filmoteca.R
 @Composable
 @Preview(showBackground = true)
 fun AboutScreen() {
+    val funtcionNotImplemented = stringResource(id = R.string.functionality_not_implemented)
     val context = LocalContext.current
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -31,37 +33,38 @@ fun AboutScreen() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Creado por Juan Marín Díez",
+            text = stringResource(id = R.string.created_by),
             modifier = Modifier.padding(5.dp),
             fontWeight = FontWeight.Bold,
             fontSize = 15.sp
         )
         Image(
             painter = painterResource(id = R.drawable.foto),
-            contentDescription = "Fotografía del autor"
+            contentDescription = stringResource(id = R.string.created_by)
         )
         Row {
             Button(onClick = { showToast(
                 context = context,
-                message = "Funcionalidad sin implementar",
+                message = funtcionNotImplemented
             ) }) {
-                Text(text = "Ir al sitio web")
+                Text(text = stringResource(id = R.string.go_to_website))
             }
             Button(onClick = { showToast(
                 context = context,
-                message = "Funcionalidad sin implementar"
+                message = funtcionNotImplemented
             ) }) {
-                Text(text = "Obtener soporte")
+                Text(text = stringResource(id = R.string.get_support))
             }
         }
         Button(onClick = { showToast(
             context = context,
-            message = "Funcionalidad sin implementar"
+            message = funtcionNotImplemented
         ) }) {
-            Text(text = "Volver")
+            Text(text = stringResource(id = R.string.go_back))
         }
     }
 }
+
 
 fun showToast(context: Context, message: String) {
     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
