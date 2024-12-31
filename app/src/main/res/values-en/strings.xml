@@ -5,4 +5,11 @@
     <string name="get_support">Get support</string>
     <string name="go_back">Go back</string>
     <string name="functionality_not_implemented">Functionality not implemented</string>
+    <string name="ver_pel_cula_a">A movie info</string>
+    <string name="ver_pel_cula_b">B movie info</string>
+    <string name="ver_pel_cula_relacionada">View related movie</string>
+    <string name="editar_pel_cula">Edit movie</string>
+    <string name="volver_a_la_principal">Back to home</string>
+    <string name="datos_de_la_pel_cula">Movie details</string>
+    <string name="acerca_de">About</string>
 </resources>
