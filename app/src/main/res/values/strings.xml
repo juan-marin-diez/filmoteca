@@ -5,4 +5,11 @@
     <string name="get_support">Obtener soporte</string>
     <string name="go_back">Volver</string>
     <string name="functionality_not_implemented">Funcionalidad sin implementar</string>
+    <string name="ver_pel_cula_a">Ver película A</string>
+    <string name="ver_pel_cula_b">Ver película B</string>
+    <string name="ver_pel_cula_relacionada">Ver película relacionada</string>
+    <string name="editar_pel_cula">Editar película</string>
+    <string name="volver_a_la_principal">Volver a la principal</string>
+    <string name="datos_de_la_pel_cula">Datos de la película</string>
+    <string name="acerca_de">Acerca de</string>
 </resources>

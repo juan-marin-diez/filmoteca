@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,50 +15,18 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.campusdigitalfp.filmoteca.R
 
 @Composable
-@Preview(showBackground = true)
-fun AboutScreen() {
-    val funtcionNotImplemented = stringResource(id = R.string.functionality_not_implemented)
-    val context = LocalContext.current
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = stringResource(id = R.string.created_by),
-            modifier = Modifier.padding(5.dp),
-            fontWeight = FontWeight.Bold,
-            fontSize = 15.sp
-        )
-        Image(
-            painter = painterResource(id = R.drawable.foto),
-            contentDescription = stringResource(id = R.string.created_by)
-        )
-        Row {
-            Button(onClick = { abrirPaginaWeb("https://www.campusdigitalfp.com/", context) }) {
-                Text(text = stringResource(id = R.string.go_to_website))
-            }
-
-            Button(onClick = { mandarEmail(context, email = "juan.marindiez@outlook.es", asunto = "Soporte filmoteca") }) {
-                Text(text = stringResource(id = R.string.get_support))
-            }
-        }
-        Button(onClick = { showToast(
-            context = context,
-            message = funtcionNotImplemented
-        ) }) {
-            Text(text = stringResource(id = R.string.go_back))
-        }
-    }
+fun AboutScreen(navController: NavHostController) {
+    AboutScreenContent(navController)
 }
 
 
@@ -86,5 +53,38 @@ fun mandarEmail(context: Context, email: String, asunto: String) {
     }
     else {
         showToast(context, "No hay ninguna aplicación de correo")
+    }
+}
+
+@Composable
+fun AboutScreenContent(navController: NavHostController) {
+    val context = LocalContext.current
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = stringResource(id = R.string.created_by),
+            modifier = Modifier.padding(5.dp),
+            fontWeight = FontWeight.Bold,
+            fontSize = 15.sp
+        )
+        Image(
+            painter = painterResource(id = R.drawable.foto),
+            contentDescription = stringResource(id = R.string.created_by)
+        )
+        Row {
+            Button(onClick = { abrirPaginaWeb("https://www.campusdigitalfp.com/", context) }) {
+                Text(text = stringResource(id = R.string.go_to_website))
+            }
+
+            Button(onClick = { mandarEmail(context, email = "juan.marindiez@outlook.es", asunto = "Soporte filmoteca") }) {
+                Text(text = stringResource(id = R.string.get_support))
+            }
+        }
+        Button(onClick = { navController.popBackStack() }) {
+            Text(text = stringResource(id = R.string.go_back))
+        }
     }
 }
