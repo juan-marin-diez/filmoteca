@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Film library</string>
+    <string name="created_by">Created by Juan Marín Díez</string>
+    <string name="go_to_website">Go to website</string>
+    <string name="get_support">Get support</string>
+    <string name="go_back">Go back</string>
+    <string name="functionality_not_implemented">Functionality not implemented</string>
+</resources>
