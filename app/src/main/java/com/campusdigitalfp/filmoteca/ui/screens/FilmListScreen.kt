@@ -26,10 +26,10 @@ fun FilmListScreenContent(navController: NavHostController) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Button(onClick = { TODO() }) {
+        Button(onClick = { navController.navigate(Screens.FilmData.route + "/A") }) {
             Text(stringResource(R.string.ver_pel_cula_a))
         }
-        Button(onClick = { TODO() }) {
+        Button(onClick = { navController.navigate(Screens.FilmData.route + "/B") }) {
             Text(stringResource(R.string.ver_pel_cula_b))
         }
         Button(onClick = { navController.navigate(Screens.About.route) }) {

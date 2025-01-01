@@ -13,9 +13,18 @@ import com.campusdigitalfp.filmoteca.ui.screens.FilmListScreen
 fun Navigation(){
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = Screens.FilmList.route) {
-        composable(route = Screens.FilmList.route) { FilmListScreen(navController) }
-        composable(route = Screens.About.route) { AboutScreen(navController) }
-        composable(route = Screens.FilmData.route) { FilmDataScreen(navController) }
+        composable(route = Screens.FilmList.route) {
+            FilmListScreen(navController)
+        }
+        composable(route = Screens.About.route) {
+            AboutScreen(navController)
+        }
+        composable(route = Screens.FilmData.route + "/{filmName}") {
+            FilmDataScreen(
+                navController = navController,
+                filmName = it.arguments?.getString("filmName")
+            )
+        }
         composable(route = Screens.FilmEdit.route) { FilmEditScreen(navController) }
     }
 }

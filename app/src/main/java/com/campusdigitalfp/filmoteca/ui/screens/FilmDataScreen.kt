@@ -13,21 +13,31 @@ import com.campusdigitalfp.filmoteca.R
 import com.campusdigitalfp.filmoteca.navigation.Screens
 
 @Composable
-fun FilmDataScreen(navController: NavHostController) {
-    FilmDataScreenContent(navController)
+fun FilmDataScreen(navController: NavHostController, filmName: String?) {
+    FilmDataScreenContent(navController, filmName)
 }
 
 @Composable
-fun FilmDataScreenContent(navController: NavHostController) {
+fun FilmDataScreenContent(navController: NavHostController, filmName: String?) {
+    var route = ""
+    var film = ""
+    if (filmName != null) {
+        if (filmName == "A") {
+            film = "Película A"
+            route = Screens.FilmData.route + "/B"
+        } else {
+            film = "Película B"
+            route = Screens.FilmData.route + "/A"
+        }
+    }
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(stringResource(R.string.datos_de_la_pel_cula))
-        Button(onClick = { TODO() }) {
-            Text(stringResource(R.string.ver_pel_cula_relacionada))
-        }
+        Text(film)
+        Button(onClick = { navController.navigate(route = route) }) { Text(stringResource(R.string.ver_pel_cula_relacionada)) }
         Button(onClick = { TODO() }) {
             Text(stringResource(R.string.editar_pel_cula))
         }
