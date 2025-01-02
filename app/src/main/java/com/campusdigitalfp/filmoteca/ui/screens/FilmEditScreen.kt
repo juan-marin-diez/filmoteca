@@ -8,10 +8,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
-import com.campusdigitalfp.filmoteca.R
-import com.campusdigitalfp.filmoteca.navigation.Screens
 
 @Composable
 fun FilmEditScreen(navController: NavHostController) {
@@ -26,11 +23,17 @@ fun FilmEditScreenContent(navController: NavHostController) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text("Editando película")
-        Button(onClick = { navController.navigate(Screens.FilmEdit.route) }) {
-            Text(stringResource(R.string.editar_pel_cula))
+        Button(onClick = {
+            navController.previousBackStackEntry?.savedStateHandle?.set("key_result", "RESULT_OK")
+            navController.popBackStack()
+        }) {
+            Text("Guardar")
         }
-        Button(onClick = { navController.navigate(Screens.FilmList.route) }) {
-            Text(stringResource(R.string.volver_a_la_principal))
+        Button(onClick = {
+            navController.previousBackStackEntry?.savedStateHandle?.set("key_result", "RESULT_CANCELED")
+            navController.popBackStack()
+        }) {
+            Text("Cancelar")
         }
     }
 }

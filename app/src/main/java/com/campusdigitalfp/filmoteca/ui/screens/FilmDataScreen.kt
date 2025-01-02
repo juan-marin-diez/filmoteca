@@ -19,6 +19,8 @@ fun FilmDataScreen(navController: NavHostController, filmName: String?) {
 
 @Composable
 fun FilmDataScreenContent(navController: NavHostController, filmName: String?) {
+    val savedStateHandle = navController.currentBackStackEntry?.savedStateHandle
+    val result = savedStateHandle?.get<String>("key_result")
     var route = ""
     var film = ""
     if (filmName != null) {
@@ -38,12 +40,16 @@ fun FilmDataScreenContent(navController: NavHostController, filmName: String?) {
         Text(stringResource(R.string.datos_de_la_pel_cula))
         Text(film)
         Button(onClick = { navController.navigate(route = route) }) { Text(stringResource(R.string.ver_pel_cula_relacionada)) }
-        Button(onClick = { TODO() }) {
+        Button(onClick = { navController.navigate(Screens.FilmEdit.route) }) {
             Text(stringResource(R.string.editar_pel_cula))
+        }
+        result?.let {
+            Text(text = it)
         }
         Button(onClick = { navController.navigate(Screens.FilmList.route) }) {
             Text(stringResource(R.string.volver_a_la_principal))
         }
     }
 }
+
 
