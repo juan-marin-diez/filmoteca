@@ -1,5 +1,6 @@
 package com.campusdigitalfp.filmoteca.ui.screens
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -24,14 +26,15 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.campusdigitalfp.filmoteca.R
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun AboutScreen(navController: NavHostController) {
-    AboutScreenContent(navController)
-}
-
-
-fun showToast(context: Context, message: String) {
-    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        topBar = {
+            AppBar(showNavigationButton = false, navController = navController)
+        },
+    ) { AboutScreenContent(navController) }
 }
 
 fun abrirPaginaWeb(url: String, context: Context) {
@@ -47,12 +50,11 @@ fun mandarEmail(context: Context, email: String, asunto: String) {
         putExtra(Intent.EXTRA_SUBJECT, asunto)
     }
 
-    // Verifica si hay una aplicación que puede manejar el Intent
-    if (intent.resolveActivity(context.packageManager) != null) {
+    try {
         context.startActivity(intent)
     }
-    else {
-        showToast(context, "No hay ninguna aplicación de correo")
+    catch(e: Exception) {
+        Toast.makeText(context, "No hay ninguna aplicación de correo", Toast.LENGTH_SHORT).show()
     }
 }
 
