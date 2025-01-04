@@ -20,7 +20,8 @@ fun FilmEditScreen(navController: NavHostController) {
         topBar = {
             AppBar(showNavigationButton = true, navController = navController)
         },
-    ) { FilmEditScreenContent(navController) }
+    ) { innerPadding ->
+        FilmEditScreenContent(navController = navController) }
 }
 
 @Composable

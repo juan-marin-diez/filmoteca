@@ -32,16 +32,9 @@ fun AboutScreen(navController: NavHostController) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            AppBar(showNavigationButton = false, navController = navController)
+            AppBar(showNavigationButton = true, navController = navController)
         },
     ) { AboutScreenContent(navController) }
-}
-
-fun abrirPaginaWeb(url: String, context: Context) {
-    val intent = Intent(Intent.ACTION_VIEW).apply {
-        data = Uri.parse(url) // Establece la URL que quieres abrir
-    }
-    context.startActivity(intent) // Inicia la actividad
 }
 
 fun mandarEmail(context: Context, email: String, asunto: String) {
@@ -85,7 +78,7 @@ fun AboutScreenContent(navController: NavHostController) {
                 Text(text = stringResource(id = R.string.get_support))
             }
         }
-        Button(onClick = { navController.popBackStack() }) {
+        Button(onClick = { navController.navigateUp() }) {
             Text(text = stringResource(id = R.string.go_back))
         }
     }

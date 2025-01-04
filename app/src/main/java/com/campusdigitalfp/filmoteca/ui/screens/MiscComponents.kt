@@ -1,5 +1,8 @@
 package com.campusdigitalfp.filmoteca.ui.screens
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -20,7 +23,7 @@ fun AppBar(showNavigationButton: Boolean, navController: NavHostController)
         title = { Text(stringResource(R.string.app_name)) },
         navigationIcon = {
             if (showNavigationButton) {
-                IconButton(onClick = { navController.popBackStack() }) {
+                IconButton(onClick = { navController.navigateUp() }) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = "Go back"
@@ -31,3 +34,9 @@ fun AppBar(showNavigationButton: Boolean, navController: NavHostController)
     )
 }
 
+fun abrirPaginaWeb(url: String, context: Context) {
+    val intent = Intent(Intent.ACTION_VIEW).apply {
+        data = Uri.parse(url) // Establece la URL que quieres abrir
+    }
+    context.startActivity(intent) // Inicia la actividad
+}
