@@ -72,7 +72,8 @@ fun NewFilmListScreenContent (navController: NavHostController, innerPadding: Pa
         items(items = FilmDataSource.films,)
         { film ->
             Row(verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.clickable(onClick = { navController.navigate(Screens.FilmData.route + "/${film.id}") })
+                modifier = Modifier.clickable(
+                    onClick = { navController.navigate(Screens.FilmData.route + "/${FilmDataSource.films.indexOf(film)}") })
             ) {
                 Image(
                     modifier = Modifier.padding(5.dp)

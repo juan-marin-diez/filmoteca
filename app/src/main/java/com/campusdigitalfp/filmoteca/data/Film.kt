@@ -17,6 +17,8 @@ data class Film(
     }
 
     companion object {
+        const val  FORMAT_UNDEFINED = -1 // Formato no definido
+        const val  GENRE_UNDEFINED = -1 // Género no definido
         const val FORMAT_DVD = 0 // Formatos
         const val FORMAT_BLURAY = 1
         const val FORMAT_DIGITAL = 2

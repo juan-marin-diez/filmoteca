@@ -19,12 +19,17 @@ fun Navigation(){
         composable(route = Screens.About.route) {
             AboutScreen(navController)
         }
-        composable(route = Screens.FilmData.route + "/{filmName}") {
+        composable(route = Screens.FilmData.route + "/{indexOfFilm}") {
             FilmDataScreen(
                 navController = navController,
-                filmName = it.arguments?.getString("filmName")
+                indexOfFilm = it.arguments?.let { it.getString("indexOfFilm")?.toInt() }?:-1
             )
         }
-        composable(route = Screens.FilmEdit.route) { FilmEditScreen(navController) }
+        composable(route = Screens.FilmEdit.route + "/{indexOfFilm}") {
+            FilmEditScreen(
+                navController = navController,
+                indexOfFilm = it.arguments?.getString("indexOfFilm")?.let { it.toInt() }?:-1
+            )
+        }
     }
 }
