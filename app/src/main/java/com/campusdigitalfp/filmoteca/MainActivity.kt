@@ -1,4 +1,4 @@
-package com.campusdigitalfp.filmoteca.ui.screens
+package com.campusdigitalfp.filmoteca
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

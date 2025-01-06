@@ -39,46 +39,11 @@ fun FilmDataScreen(navController: NavHostController, indexOfFilm: Int) {
             )
         },
     ) { innerPadding ->
-        NewFilmDataScreenContent(navController = navController, innerPadding, indexOfFilm) }
+        FilmDataScreenContent(navController = navController, innerPadding, indexOfFilm) }
 }
 
 @Composable
-fun FilmDataScreenContent(navController: NavHostController, filmName: String?) {
-    val savedStateHandle = navController.currentBackStackEntry?.savedStateHandle
-    val result = savedStateHandle?.get<String>("key_result")
-    var route = ""
-    var film = ""
-    if (filmName != null) {
-        if (filmName == "A") {
-            film = "Película A"
-            route = Screens.FilmData.route + "/B"
-        } else {
-            film = "Película B"
-            route = Screens.FilmData.route + "/A"
-        }
-    }
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(stringResource(R.string.datos_de_la_pel_cula))
-        Text(film)
-        Button(onClick = { navController.navigate(route = route) }) { Text(stringResource(R.string.ver_pel_cula_relacionada)) }
-        Button(onClick = { navController.navigate(Screens.FilmEdit.route) }) {
-            Text(stringResource(R.string.editar_pel_cula))
-        }
-        result?.let {
-            Text(text = it)
-        }
-        Button(onClick = { navController.navigate(Screens.FilmList.route) }) {
-            Text(stringResource(R.string.volver_a_la_principal))
-        }
-    }
-}
-
-@Composable
-fun NewFilmDataScreenContent(
+fun FilmDataScreenContent(
     navController: NavHostController,
     innerPadding: PaddingValues,
     indexOfFilm: Int

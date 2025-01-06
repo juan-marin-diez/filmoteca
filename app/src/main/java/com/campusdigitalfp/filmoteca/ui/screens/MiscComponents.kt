@@ -6,6 +6,7 @@ import android.net.Uri
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.DropdownMenu
@@ -19,15 +20,24 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import com.campusdigitalfp.filmoteca.R
+import com.campusdigitalfp.filmoteca.data.DelFilm
+import com.campusdigitalfp.filmoteca.data.Film
 import com.campusdigitalfp.filmoteca.navigation.Screens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppBar(showNavigationButton: Boolean, showMenuButton: Boolean, navController: NavHostController)
+fun AppBar(
+    showNavigationButton: Boolean,
+    showMenuButton: Boolean,
+    navController: NavHostController,
+    showDelButton: MutableState<Boolean>? = null,
+    selectedFilms: SnapshotStateList<Film>? = null
+)
 {
     val context = LocalContext.current
     val visible: MutableState<Boolean> = remember { mutableStateOf(false) }
@@ -57,6 +67,19 @@ fun AppBar(showNavigationButton: Boolean, showMenuButton: Boolean, navController
                     Icon(
                         imageVector = Icons.Filled.Menu,
                         contentDescription = context.resources.getString(R.string.menu)
+                    )
+                }
+            if (showDelButton?.value?:false)
+                IconButton(onClick = {
+                    if (selectedFilms != null && showDelButton != null) {
+                        DelFilm(selectedFilms)
+                        showDelButton?.let { it.value = !it.value }
+                        navController.navigate(Screens.FilmList.route)
+                    }
+                }) {
+                    Icon(
+                        imageVector = Icons.Filled.Delete,
+                        contentDescription = "Borrar"
                     )
                 }
             Menu(navController = navController,visible = visible)
