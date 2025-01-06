@@ -1,6 +1,5 @@
 package com.campusdigitalfp.filmoteca.ui.screens
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -29,14 +28,16 @@ import com.campusdigitalfp.filmoteca.R
 import com.campusdigitalfp.filmoteca.data.FilmDataSource
 import com.campusdigitalfp.filmoteca.navigation.Screens
 
-
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun FilmListScreen(navController: NavHostController) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            AppBar(showNavigationButton = false, navController = navController)
+            AppBar(
+                showNavigationButton = false,
+                showMenuButton = true,
+                navController = navController
+            )
         },
     ) { innerPadding ->
         NewFilmListScreenContent(navController, innerPadding) }

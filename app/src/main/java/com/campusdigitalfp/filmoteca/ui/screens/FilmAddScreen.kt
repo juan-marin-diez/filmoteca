@@ -1,9 +1,7 @@
 package com.campusdigitalfp.filmoteca.ui.screens
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -34,11 +32,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.campusdigitalfp.filmoteca.R
+import com.campusdigitalfp.filmoteca.data.Film
 import com.campusdigitalfp.filmoteca.data.FilmDataSource
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun FilmEditScreen(navController: NavHostController, indexOfFilm: Int) {
+fun FilmAddScreen(navController: NavHostController) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -48,56 +46,33 @@ fun FilmEditScreen(navController: NavHostController, indexOfFilm: Int) {
                 navController = navController
             )
         },
-    ) {
-        NewFilmEditScreenContent(navController = navController, it, indexOfFilm) }
+    ) { paddingValues ->
+        FilmAddScreenContent(navController = navController, paddingValues) }
 }
 
 @Composable
-fun FilmEditScreenContent(navController: NavHostController, innerPadding: PaddingValues) {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text("Editando película")
-        Button(onClick = {
-            navController.previousBackStackEntry?.savedStateHandle?.set("key_result", "RESULT_OK")
-            navController.popBackStack()
-        }) {
-            Text("Guardar")
-        }
-        Button(onClick = {
-            navController.previousBackStackEntry?.savedStateHandle?.set("key_result", "RESULT_CANCELED")
-            navController.popBackStack()
-        }) {
-            Text("Cancelar")
-        }
-    }
-}
-
-@Composable
-fun NewFilmEditScreenContent(
+fun FilmAddScreenContent(
     navController: NavHostController,
     innerPadding: PaddingValues,
-    indexOfFilm: Int
 ) {
-    val film = FilmDataSource.films[indexOfFilm]
-    var titulo by remember { mutableStateOf(film.title?.let { it }?:"") }
-    var director: String by remember { mutableStateOf(film.director?.let { it }?:"") }
-    var anyo: Int by remember { mutableIntStateOf(film.year?.let{ it.toInt()} ?:2000 ) }
-    var url by remember { mutableStateOf(film.imdbUrl?.let { it }?:"") }
-    var imagen by remember { mutableIntStateOf(film.imageResId) }
-    var comentarios by remember { mutableStateOf(film.comments?.let { it }?:"") }
+    val film = Film()
+    var titulo by remember { mutableStateOf("") }
+    var director: String by remember { mutableStateOf("") }
+    var anyo: Int by remember { mutableIntStateOf(2000 ) }
+    var url by remember { mutableStateOf("") }
+    var imagen by remember { mutableIntStateOf(R.drawable.palomitas) }
+    var comentarios by remember { mutableStateOf("") }
     var expandedGenero by remember { mutableStateOf(false) }
     var expandedFormato by remember { mutableStateOf(false) }
     val context = LocalContext.current
     val generoList = context.resources.getStringArray(R.array.genero_list).toList()
     val formatoList = context.resources.getStringArray(R.array.formato_list).toList()
-    var genero by remember { mutableIntStateOf(film.genre) }
-    var formato by remember { mutableIntStateOf(film.format) }
+    var genero by remember { mutableIntStateOf(-1) }
+    var formato by remember { mutableIntStateOf(-1) }
 
     Column (
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize()
+            .padding(innerPadding),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(
@@ -107,8 +82,8 @@ fun NewFilmEditScreenContent(
         ) {
             Image(
                 modifier = Modifier.fillMaxWidth(0.2f),
-                painter = painterResource(id = film.imageResId),
-                contentDescription = "Cartel de ${film.title}"
+                painter = painterResource(id = R.drawable.palomitas),
+                contentDescription = "Cartel de $titulo"
             )
             Button(
                 modifier = Modifier
@@ -143,7 +118,9 @@ fun NewFilmEditScreenContent(
         )
         TextField(
             value = anyo.toString(),
-            onValueChange = { anyo = it.toInt() },
+            onValueChange = {
+                anyo = it.toIntOrNull() ?: 0
+            },
             label = { Text("Año") },
             modifier = Modifier
                 .fillMaxWidth()
@@ -240,14 +217,15 @@ fun NewFilmEditScreenContent(
                 onClick = {
                     try
                     {
-                        FilmDataSource.films[indexOfFilm].title = titulo
-                        FilmDataSource.films[indexOfFilm].director = director
-                        FilmDataSource.films[indexOfFilm].year = anyo
-                        FilmDataSource.films[indexOfFilm].imdbUrl = url
-                        FilmDataSource.films[indexOfFilm].comments = comentarios
-                        FilmDataSource.films[indexOfFilm].imageResId = imagen
-                        FilmDataSource.films[indexOfFilm].genre = genero
-                        FilmDataSource.films[indexOfFilm].format = formato
+                        film.title = titulo
+                        film.director = director
+                        film.year = anyo
+                        film.imdbUrl = if (url.isEmpty()) null else url
+                        film.comments = comentarios
+                        film.imageResId = imagen
+                        film.genre = genero
+                        film.format = formato
+                        FilmDataSource.films.add(film)
                         navController.previousBackStackEntry?.savedStateHandle?.set("key_result", "RESULT_OK")
                         navController.popBackStack()
                     }
@@ -275,10 +253,9 @@ fun NewFilmEditScreenContent(
 
 @Composable
 @Preview
-fun NewFilmEditScreenContentPreview() {
-    NewFilmEditScreenContent(
+fun FilmAddScreenContentPreview() {
+    FilmAddScreenContent(
         navController = NavHostController(context = LocalContext.current),
         innerPadding = PaddingValues(0.dp),
-        indexOfFilm = 1
     )
 }

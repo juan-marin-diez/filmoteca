@@ -32,7 +32,11 @@ fun AboutScreen(navController: NavHostController) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            AppBar(showNavigationButton = true, navController = navController)
+            AppBar(
+                showNavigationButton = true,
+                showMenuButton = false,
+                navController = navController
+            )
         },
     ) { AboutScreenContent(navController) }
 }

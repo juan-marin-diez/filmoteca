@@ -5,6 +5,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.campusdigitalfp.filmoteca.ui.screens.AboutScreen
+import com.campusdigitalfp.filmoteca.ui.screens.FilmAddScreen
 import com.campusdigitalfp.filmoteca.ui.screens.FilmDataScreen
 import com.campusdigitalfp.filmoteca.ui.screens.FilmEditScreen
 import com.campusdigitalfp.filmoteca.ui.screens.FilmListScreen
@@ -29,6 +30,11 @@ fun Navigation(){
             FilmEditScreen(
                 navController = navController,
                 indexOfFilm = it.arguments?.getString("indexOfFilm")?.let { it.toInt() }?:-1
+            )
+        }
+        composable(route = Screens.FilmAdd.route) {
+            FilmAddScreen (
+                navController = navController
             )
         }
     }

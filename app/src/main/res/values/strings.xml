@@ -12,4 +12,6 @@
     <string name="volver_a_la_principal">Volver a la principal</string>
     <string name="datos_de_la_pel_cula">Datos de la película</string>
     <string name="acerca_de">Acerca de</string>
+    <string name="add_film">Añadir película</string>
+    <string name="menu">Menú</string>
 </resources>

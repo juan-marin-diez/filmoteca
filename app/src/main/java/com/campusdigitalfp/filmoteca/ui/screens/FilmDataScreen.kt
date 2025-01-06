@@ -32,7 +32,11 @@ fun FilmDataScreen(navController: NavHostController, indexOfFilm: Int) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            AppBar(showNavigationButton = true, navController = navController)
+            AppBar(
+                showNavigationButton = true,
+                showMenuButton = false,
+                navController = navController
+            )
         },
     ) { innerPadding ->
         NewFilmDataScreenContent(navController = navController, innerPadding, indexOfFilm) }
