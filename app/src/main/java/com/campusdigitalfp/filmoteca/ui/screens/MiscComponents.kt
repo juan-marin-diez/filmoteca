@@ -3,8 +3,10 @@ package com.campusdigitalfp.filmoteca.ui.screens
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import androidx.compose.foundation.layout.Row
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -32,13 +34,22 @@ fun AppBar(showNavigationButton: Boolean, showMenuButton: Boolean, navController
     TopAppBar(
         title = { Text(stringResource(R.string.app_name)) },
         navigationIcon = {
-            if (showNavigationButton)
-                IconButton(onClick = { navController.navigateUp() }) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = context.resources.getString(R.string.go_back)
-                    )
+            if (showNavigationButton) {
+                Row {
+                    IconButton(onClick = { navController.navigate(Screens.FilmList.route) }) {
+                        Icon(
+                            imageVector = Icons.Filled.Home,
+                            contentDescription = stringResource(R.string.inicio)
+                        )
+                    }
+                    IconButton(onClick = { navController.navigateUp() }) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = stringResource(R.string.go_back)
+                        )
+                    }
                 }
+            }
         },
         actions = {
             if (showMenuButton)
