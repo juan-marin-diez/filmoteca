@@ -1,5 +1,6 @@
 package com.campusdigitalfp.filmoteca.ui.screens
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -48,6 +49,12 @@ fun FilmDataScreenContent(
     innerPadding: PaddingValues,
     indexOfFilm: Int
 ) {
+    when(navController.currentBackStackEntry?.savedStateHandle?.get<String>(key = "key_result"))
+    {
+        "RESULT_OK" -> { Log.i("EDIT_FILM", "RESULT_OK") }
+        "RESULT_ERROR" -> { Log.e("EDIT_FILM", "RESULT_ERROR") }
+        "RESULT_CANCELED" -> { Log.i("EDIT_FILM", "RESULT_CANCELED") }
+    }
     val film = FilmDataSource.films[indexOfFilm]
     val context = LocalContext.current
     Column (modifier = Modifier.fillMaxSize()

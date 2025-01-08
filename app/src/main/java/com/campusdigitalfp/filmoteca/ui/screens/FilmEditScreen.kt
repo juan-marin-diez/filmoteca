@@ -265,7 +265,7 @@ fun NewFilmEditScreenContent(
                     .fillMaxWidth(),
                 onClick = {
                     navController.previousBackStackEntry?.savedStateHandle?.set("key_result", "RESULT_CANCELED")
-                    navController.popBackStack()
+                    navController.navigateUp()
                 }) {
                 Text("Cancelar")
             }

@@ -1,5 +1,7 @@
 package com.campusdigitalfp.filmoteca.ui.screens
 
+import android.util.Log.e
+import android.util.Log.i
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.combinedClickable
@@ -64,6 +66,12 @@ fun FilmListScreenContent (
     isActionMode: MutableState<Boolean>,
     selectedFilms: SnapshotStateList<Film>
 ) {
+    when(navController.currentBackStackEntry?.savedStateHandle?.get<String>(key = "key_result"))
+    {
+        "RESULT_OK" -> { i("ADD_NEW_FILM", "RESULT_OK") }
+        "RESULT_ERROR" -> { e("ADD_NEW_FILM", "RESULT_ERROR") }
+        "RESULT_CANCELED" -> { i("ADD_NEW_FILM", "RESULT_CANCELED") }
+    }
     LazyColumn(
         modifier = Modifier.fillMaxSize()
             .padding(innerPadding),
