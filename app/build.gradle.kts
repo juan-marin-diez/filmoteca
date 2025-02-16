@@ -2,14 +2,15 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("com.google.gms.google-services")
 }
 
 android {
-    namespace = "com.campusdigitalfp.filmoteca"
+    namespace = "app.is_mobile.filmoteca"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.campusdigitalfp.filmoteca"
+        applicationId = "app.is_mobile.filmoteca"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -59,4 +60,6 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    implementation(platform("com.google.firebase:firebase-bom:33.9.0"))
+    implementation("com.google.firebase:firebase-analytics")
 }
