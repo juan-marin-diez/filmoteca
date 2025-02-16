@@ -13,7 +13,7 @@
         android:theme="@style/Theme.Filmoteca"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name="app.is_mobile.filmoteca.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.Filmoteca">
             <intent-filter>
