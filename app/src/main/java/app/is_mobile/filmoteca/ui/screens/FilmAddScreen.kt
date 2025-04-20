@@ -31,7 +31,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.campusdigitalfp.filmoteca.R
+import app.is_mobile.filmoteca.R
 import app.is_mobile.filmoteca.data.Film
 import app.is_mobile.filmoteca.data.FilmDataSource
 

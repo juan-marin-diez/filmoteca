@@ -1,6 +1,6 @@
 package app.is_mobile.filmoteca.data
 
-import com.campusdigitalfp.filmoteca.R
+import app.is_mobile.filmoteca.R
 
 object FilmDataSource {
     val films: MutableList<Film> = mutableListOf()

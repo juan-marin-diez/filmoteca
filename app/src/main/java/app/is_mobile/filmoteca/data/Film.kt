@@ -17,15 +17,15 @@ data class Film(
     }
 
     companion object {
-        const val  FORMAT_UNDEFINED = -1 // Formato no definido
-        const val  GENRE_UNDEFINED = -1 // Género no definido
-        const val FORMAT_DVD = 0 // Formatos
-        const val FORMAT_BLURAY = 1
-        const val FORMAT_DIGITAL = 2
-        const val GENRE_ACTION = 0 // Géneros
-        const val GENRE_COMEDY = 1
-        const val GENRE_DRAMA = 2
-        const val GENRE_SCIFI = 3
-        const val GENRE_HORROR = 4
+        const val  FORMAT_UNDEFINED = 0 // Formato no definido
+        const val  GENRE_UNDEFINED = 0 // Género no definido
+        const val FORMAT_DVD = 1 // Formatos
+        const val FORMAT_BLURAY = 2
+        const val FORMAT_DIGITAL = 3
+        const val GENRE_ACTION = 1 // Géneros
+        const val GENRE_COMEDY = 2
+        const val GENRE_DRAMA = 3
+        const val GENRE_SCIFI = 4
+        const val GENRE_HORROR = 5
     }
 }

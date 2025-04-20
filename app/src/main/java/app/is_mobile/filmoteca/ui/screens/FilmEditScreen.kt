@@ -33,7 +33,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.campusdigitalfp.filmoteca.R
+import app.is_mobile.filmoteca.R
 import app.is_mobile.filmoteca.data.FilmDataSource
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -49,7 +49,7 @@ fun FilmEditScreen(navController: NavHostController, indexOfFilm: Int) {
             )
         },
     ) {
-        NewFilmEditScreenContent(navController = navController, it, indexOfFilm) }
+        NewFilmEditScreenContent(navController = navController, innerPadding = it, indexOfFilm) }
 }
 
 @Composable
@@ -97,7 +97,8 @@ fun NewFilmEditScreenContent(
     var formato by remember { mutableIntStateOf(film.format) }
 
     Column (
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize()
+            .padding(innerPadding),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(
@@ -166,34 +167,20 @@ fun NewFilmEditScreenContent(
                 .fillMaxWidth()
         ) {
             Text(text = "Género")
-            if(genero>=0)
-                Text(text = " - " +generoList[genero+1])
+            if(genero>0)
+                Text(text = " - " +generoList[genero])
         }
         DropdownMenu(
             modifier = Modifier.fillMaxWidth(),
             expanded = expandedGenero,
             onDismissRequest = { expandedGenero = !expandedGenero },
         ) {
-            DropdownMenuItem(
-                text = { Text("Acción") },
-                onClick = { genero = 0; expandedGenero = !expandedGenero }
-            )
-            DropdownMenuItem(
-                text = { Text("Comedia") },
-                onClick = { genero = 1; expandedGenero = !expandedGenero }
-            )
-            DropdownMenuItem(
-                text = { Text("Drama") },
-                onClick = { genero = 2; expandedGenero = !expandedGenero }
-            )
-            DropdownMenuItem(
-                text = { Text("Sci-Fi") },
-                onClick = { genero = 3; expandedGenero = !expandedGenero }
-            )
-            DropdownMenuItem(
-                text = { Text("Terror") },
-                onClick = { genero = 4; expandedGenero = !expandedGenero }
-            )
+            generoList.forEachIndexed { index, option ->
+                DropdownMenuItem(
+                    text = { Text(option) },
+                    onClick = { genero = index; expandedGenero = !expandedGenero }
+                )
+            }
         }
         TextButton (
             onClick = { expandedFormato = !expandedFormato },
@@ -203,25 +190,19 @@ fun NewFilmEditScreenContent(
                 .fillMaxWidth()
         ) {
             Text(text = "Formato")
-            if(formato>=0)
-                Text(text = " - " + formatoList[formato+1])
+            if(formato>0)
+                Text(text = " - " + formatoList[formato])
         }
         DropdownMenu(
             expanded = expandedFormato,
             onDismissRequest = { expandedFormato = !expandedFormato }
         ) {
-            DropdownMenuItem(
-                text = { Text("DVD") },
-                onClick = { formato = 0; expandedFormato = !expandedFormato }
-            )
-            DropdownMenuItem(
-                text = { Text("Blu-ray") },
-                onClick = { formato = 1; expandedFormato = !expandedFormato }
-            )
-            DropdownMenuItem(
-                text = { Text("Online") },
-                onClick = { formato = 2; expandedFormato = !expandedFormato }
-            )
+            formatoList.forEachIndexed { index, option ->
+                DropdownMenuItem(
+                    text = { Text(option) },
+                    onClick = { formato = index; expandedFormato = !expandedFormato }
+                )
+            }
         }
         TextField(
             value = comentarios,

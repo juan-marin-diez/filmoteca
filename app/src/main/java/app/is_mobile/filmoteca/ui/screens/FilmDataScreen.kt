@@ -22,7 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.campusdigitalfp.filmoteca.R
+import app.is_mobile.filmoteca.R
 import app.is_mobile.filmoteca.data.FilmDataSource
 import app.is_mobile.filmoteca.navigation.Screens
 
@@ -72,12 +72,12 @@ fun FilmDataScreenContent(
                 Text(film.director?.let { it }?:"")
                 Text("Año:", fontWeight = FontWeight.Bold)
                 Text(film.year.toString())
-                if(film.genre>=0 && film.format>=0)
-                    Text(context.resources.getStringArray(R.array.genero_list)[film.genre+1] + " - " +
-                            context.resources.getStringArray(R.array.formato_list)[film.format+1])
+                if(film.genre>0 && film.format>0)
+                    Text(context.resources.getStringArray(R.array.genero_list)[film.genre] + " - " +
+                            context.resources.getStringArray(R.array.formato_list)[film.format])
                 else
-                    Text(context.resources.getStringArray(R.array.genero_list)[film.genre+1] +
-                            context.resources.getStringArray(R.array.formato_list)[film.format+1])
+                    Text(context.resources.getStringArray(R.array.genero_list)[film.genre] +
+                            context.resources.getStringArray(R.array.formato_list)[film.format])
             }
         }
         Button(modifier = Modifier.fillMaxWidth()

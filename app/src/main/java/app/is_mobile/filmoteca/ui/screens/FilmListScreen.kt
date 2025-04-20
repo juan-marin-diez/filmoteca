@@ -85,7 +85,11 @@ fun FilmListScreenContent (
                     onClick = { if( !isActionMode.value )
                                     navController.navigate(Screens.FilmData.route + "/${FilmDataSource.films.indexOf(film)}")
                                 else {
-                                    if(selectedFilms.contains(film))
+                                    if(selectedFilms.size==1&&selectedFilms.contains(film)) {
+                                        selectedFilms.clear()
+                                        isActionMode.value = !isActionMode.value
+                                    }
+                                    else  if(selectedFilms.contains(film))
                                         selectedFilms.remove(film)
                                     else
                                         selectedFilms.add(film)

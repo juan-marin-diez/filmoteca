@@ -27,7 +27,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.campusdigitalfp.filmoteca.R
+import app.is_mobile.filmoteca.R
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable

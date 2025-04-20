@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "295988044657",
+    "project_id": "filmoteca-26de2",
+    "storage_bucket": "filmoteca-26de2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:295988044657:android:222510eef1098ba872ccd0",
+        "android_client_info": {
+          "package_name": "app.is_mobile.filmoteca"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZWJKkQzMProUtfNO8nnDzygP2YHZmjnc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

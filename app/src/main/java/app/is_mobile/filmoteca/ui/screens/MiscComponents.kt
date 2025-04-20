@@ -24,7 +24,7 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
-import com.campusdigitalfp.filmoteca.R
+import app.is_mobile.filmoteca.R
 import app.is_mobile.filmoteca.data.DelFilm
 import app.is_mobile.filmoteca.data.Film
 import app.is_mobile.filmoteca.navigation.Screens
@@ -69,9 +69,9 @@ fun AppBar(
                         contentDescription = context.resources.getString(R.string.menu)
                     )
                 }
-            if (showDelButton?.value?:false)
+            if (showDelButton?.value == true)
                 IconButton(onClick = {
-                    if (selectedFilms != null && showDelButton != null) {
+                    if (selectedFilms != null) {
                         DelFilm(selectedFilms)
                         showDelButton?.let { it.value = !it.value }
                         navController.navigate(Screens.FilmList.route)
