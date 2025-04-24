@@ -1,4 +1,4 @@
-package app.is_mobile.filmoteca.ui.screens
+package app.is_mobile.filmoteca.presentation.screens
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
@@ -20,6 +20,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -27,29 +28,29 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import app.is_mobile.filmoteca.R
-import app.is_mobile.filmoteca.data.FilmDataSource
+import app.is_mobile.filmoteca.presentation.viewmodel.FilmViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun FilmEditScreen(navController: NavHostController, indexOfFilm: Int) {
+fun FilmEditScreen(navController: NavHostController, indexOfFilm: Int, viewModel: FilmViewModel) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             AppBar(
                 showNavigationButton = true,
                 showMenuButton = false,
-                navController = navController
+                navController = navController,
+                viewModel = viewModel
             )
         },
     ) {
-        NewFilmEditScreenContent(navController = navController, innerPadding = it, indexOfFilm) }
+        NewFilmEditScreenContent(navController = navController, innerPadding = it, indexOfFilm, viewModel) }
 }
 
 @Composable
@@ -79,20 +80,20 @@ fun FilmEditScreenContent(navController: NavHostController, innerPadding: Paddin
 fun NewFilmEditScreenContent(
     navController: NavHostController,
     innerPadding: PaddingValues,
-    indexOfFilm: Int
+    indexOfFilm: Int,
+    viewModel: FilmViewModel
 ) {
-    val film = FilmDataSource.films[indexOfFilm]
+    val film =viewModel.films.collectAsState().value[indexOfFilm]
     var titulo by remember { mutableStateOf(film.title?.let { it }?:"") }
     var director: String by remember { mutableStateOf(film.director?.let { it }?:"") }
     var anyo: Int by remember { mutableIntStateOf(film.year?.let{ it.toInt()} ?:2000 ) }
     var url by remember { mutableStateOf(film.imdbUrl?.let { it }?:"") }
-    var imagen by remember { mutableIntStateOf(film.imageResId) }
+    var imagen by remember { mutableStateOf(film.image) }
     var comentarios by remember { mutableStateOf(film.comments?.let { it }?:"") }
     var expandedGenero by remember { mutableStateOf(false) }
     var expandedFormato by remember { mutableStateOf(false) }
-    val context = LocalContext.current
-    val generoList = context.resources.getStringArray(R.array.genero_list).toList()
-    val formatoList = context.resources.getStringArray(R.array.formato_list).toList()
+    val generoList by viewModel.genres.collectAsState()
+    val formatoList by viewModel.formats.collectAsState()
     var genero by remember { mutableIntStateOf(film.genre) }
     var formato by remember { mutableIntStateOf(film.format) }
 
@@ -106,11 +107,16 @@ fun NewFilmEditScreenContent(
                 .fillMaxWidth()
                 .padding(5.dp)
         ) {
-            Image(
-                modifier = Modifier.fillMaxWidth(0.2f),
-                painter = painterResource(id = film.imageResId),
-                contentDescription = "Cartel de ${film.title}"
-            )
+            if(film.image!=null)
+                Image(
+                    bitmap = film.image!!.asImageBitmap(),
+                    contentDescription = "Cartel de ${film.title}",
+                )
+            else
+                Image(
+                    painter = painterResource(id = R.drawable.filmoteca),
+                    contentDescription = "Cartel de ${film.title}",
+                )
             Button(
                 modifier = Modifier
                     .padding(start = 5.dp)
@@ -177,7 +183,7 @@ fun NewFilmEditScreenContent(
         ) {
             generoList.forEachIndexed { index, option ->
                 DropdownMenuItem(
-                    text = { Text(option) },
+                    text = { Text(option.gender) },
                     onClick = { genero = index; expandedGenero = !expandedGenero }
                 )
             }
@@ -199,7 +205,7 @@ fun NewFilmEditScreenContent(
         ) {
             formatoList.forEachIndexed { index, option ->
                 DropdownMenuItem(
-                    text = { Text(option) },
+                    text = { Text(option.format) },
                     onClick = { formato = index; expandedFormato = !expandedFormato }
                 )
             }
@@ -221,14 +227,7 @@ fun NewFilmEditScreenContent(
                 onClick = {
                     try
                     {
-                        FilmDataSource.films[indexOfFilm].title = titulo
-                        FilmDataSource.films[indexOfFilm].director = director
-                        FilmDataSource.films[indexOfFilm].year = anyo
-                        FilmDataSource.films[indexOfFilm].imdbUrl = url
-                        FilmDataSource.films[indexOfFilm].comments = comentarios
-                        FilmDataSource.films[indexOfFilm].imageResId = imagen
-                        FilmDataSource.films[indexOfFilm].genre = genero
-                        FilmDataSource.films[indexOfFilm].format = formato
+                        viewModel.updateFilm(film)
                         navController.previousBackStackEntry?.savedStateHandle?.set("key_result", "RESULT_OK")
                         navController.popBackStack()
                     }
@@ -252,14 +251,4 @@ fun NewFilmEditScreenContent(
             }
         }
     }
-}
-
-@Composable
-@Preview
-fun NewFilmEditScreenContentPreview() {
-    NewFilmEditScreenContent(
-        navController = NavHostController(context = LocalContext.current),
-        innerPadding = PaddingValues(0.dp),
-        indexOfFilm = 1
-    )
 }

@@ -1,4 +1,4 @@
-package app.is_mobile.filmoteca.ui.screens
+package app.is_mobile.filmoteca.presentation.screens
 import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.Image
@@ -14,8 +14,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -23,31 +25,33 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import app.is_mobile.filmoteca.R
-import app.is_mobile.filmoteca.data.FilmDataSource
-import app.is_mobile.filmoteca.navigation.Screens
+import app.is_mobile.filmoteca.presentation.navigation.Screens
+import app.is_mobile.filmoteca.presentation.viewmodel.FilmViewModel
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun FilmDataScreen(navController: NavHostController, indexOfFilm: Int) {
+fun FilmDataScreen(navController: NavHostController, indexOfFilm: Int, viewModel: FilmViewModel) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             AppBar(
                 showNavigationButton = true,
                 showMenuButton = false,
-                navController = navController
+                navController = navController,
+                viewModel = viewModel
             )
         },
     ) { innerPadding ->
-        FilmDataScreenContent(navController = navController, innerPadding, indexOfFilm) }
+        FilmDataScreenContent(navController = navController, innerPadding, indexOfFilm, viewModel) }
 }
 
 @Composable
 fun FilmDataScreenContent(
     navController: NavHostController,
     innerPadding: PaddingValues,
-    indexOfFilm: Int
+    indexOfFilm: Int,
+    viewModel: FilmViewModel
 ) {
     when(navController.currentBackStackEntry?.savedStateHandle?.get<String>(key = "key_result"))
     {
@@ -55,17 +59,21 @@ fun FilmDataScreenContent(
         "RESULT_ERROR" -> { Log.e("EDIT_FILM", "RESULT_ERROR") }
         "RESULT_CANCELED" -> { Log.i("EDIT_FILM", "RESULT_CANCELED") }
     }
-    val film = FilmDataSource.films[indexOfFilm]
+    val film =viewModel.films.collectAsState().value[indexOfFilm]
     val context = LocalContext.current
     Column (modifier = Modifier.fillMaxSize()
         .padding(innerPadding)) {
         Row (verticalAlignment = Alignment.CenterVertically) {
-            Image(
-                modifier = Modifier.padding(8.dp)
-                    .fillMaxWidth(0.5f),
-                painter = painterResource(id=film.imageResId),
-                contentDescription = "Cartel de la película"
-            )
+            if(film.image!=null)
+                Image(
+                    bitmap = film.image!!.asImageBitmap(),
+                    contentDescription = "Cartel de ${film.title}",
+                )
+            else
+                Image(
+                    painter = painterResource(id = R.drawable.filmoteca),
+                    contentDescription = "Cartel de ${film.title}",
+                )
             Column {
                 Text(text = film.title?.let { it }?:"", style = MaterialTheme.typography.titleMedium)
                 Text(text = "Director:", fontWeight = FontWeight.Bold)

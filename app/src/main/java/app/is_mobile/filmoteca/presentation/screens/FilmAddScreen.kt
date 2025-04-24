@@ -1,4 +1,4 @@
-package app.is_mobile.filmoteca.ui.screens
+package app.is_mobile.filmoteca.presentation.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -18,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -28,47 +29,53 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toBitmap
 import androidx.navigation.NavHostController
 import app.is_mobile.filmoteca.R
-import app.is_mobile.filmoteca.data.Film
-import app.is_mobile.filmoteca.data.FilmDataSource
+import app.is_mobile.filmoteca.domain.model.Film
+import app.is_mobile.filmoteca.presentation.viewmodel.FilmViewModel
 
 @Composable
-fun FilmAddScreen(navController: NavHostController) {
+fun FilmAddScreen(navController: NavHostController, viewModel: FilmViewModel) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             AppBar(
                 showNavigationButton = true,
                 showMenuButton = false,
-                navController = navController
+                navController = navController,
+                viewModel = viewModel
             )
         },
     ) { paddingValues ->
-        FilmAddScreenContent(navController = navController, paddingValues) }
+        FilmAddScreenContent(navController = navController, paddingValues, viewModel) }
 }
 
 @Composable
 fun FilmAddScreenContent(
     navController: NavHostController,
     innerPadding: PaddingValues,
+    viewModel: FilmViewModel
 ) {
     val film = Film()
     var titulo by remember { mutableStateOf("") }
     var director: String by remember { mutableStateOf("") }
     var anyo: Int by remember { mutableIntStateOf(2000 ) }
     var url by remember { mutableStateOf("") }
-    var imagen by remember { mutableIntStateOf(R.drawable.palomitas) }
+    val context = LocalContext.current
+    var imagen by remember { mutableStateOf(ContextCompat.getDrawable(context, R.drawable.palomitas)?.toBitmap()) }
+    //var imagen by remember { mutableStateOf(BitmapPainter(R.drawable.filmoteca)) }
     var comentarios by remember { mutableStateOf("") }
     var expandedGenero by remember { mutableStateOf(false) }
     var expandedFormato by remember { mutableStateOf(false) }
-    val context = LocalContext.current
-    val generoList = context.resources.getStringArray(R.array.genero_list).toList()
-    val formatoList = context.resources.getStringArray(R.array.formato_list).toList()
-    var genero by remember { mutableIntStateOf(-1) }
-    var formato by remember { mutableIntStateOf(-1) }
+    //val generoList by viewModel.genres.collectAsState()
+    val generoList = viewModel.getGenres()
+    //val formatoList by viewModel.formats.collectAsState()
+    val formatoList = viewModel.getFormats()
+    var genero by remember { mutableIntStateOf(film.genre) }
+    var formato by remember { mutableIntStateOf(film.format) }
 
     Column (
         modifier = Modifier.fillMaxSize()
@@ -143,34 +150,20 @@ fun FilmAddScreenContent(
                 .fillMaxWidth()
         ) {
             Text(text = "Género")
-            if(genero>=0)
-                Text(text = " - " +generoList[genero+1])
+            if(genero>0)
+                Text(text = " - " + generoList[genero])
         }
         DropdownMenu(
             modifier = Modifier.fillMaxWidth(),
             expanded = expandedGenero,
             onDismissRequest = { expandedGenero = !expandedGenero },
         ) {
-            DropdownMenuItem(
-                text = { Text("Acción") },
-                onClick = { genero = 0; expandedGenero = !expandedGenero }
-            )
-            DropdownMenuItem(
-                text = { Text("Comedia") },
-                onClick = { genero = 1; expandedGenero = !expandedGenero }
-            )
-            DropdownMenuItem(
-                text = { Text("Drama") },
-                onClick = { genero = 2; expandedGenero = !expandedGenero }
-            )
-            DropdownMenuItem(
-                text = { Text("Sci-Fi") },
-                onClick = { genero = 3; expandedGenero = !expandedGenero }
-            )
-            DropdownMenuItem(
-                text = { Text("Terror") },
-                onClick = { genero = 4; expandedGenero = !expandedGenero }
-            )
+            generoList.forEachIndexed { index, option ->
+                DropdownMenuItem(
+                    text = { Text(option.gender) },
+                    onClick = { genero = index; expandedGenero = !expandedGenero }
+                )
+            }
         }
         TextButton (
             onClick = { expandedFormato = !expandedFormato },
@@ -181,7 +174,7 @@ fun FilmAddScreenContent(
         ) {
             Text(text = "Formato")
             if(formato>=0)
-                Text(text = " - " + formatoList[formato+1])
+                Text(text = " - " + formatoList[formato])
         }
         DropdownMenu(
             expanded = expandedFormato,
@@ -222,10 +215,10 @@ fun FilmAddScreenContent(
                         film.year = anyo
                         film.imdbUrl = if (url.isEmpty()) null else url
                         film.comments = comentarios
-                        film.imageResId = imagen
+                        film.image = imagen
                         film.genre = genero
                         film.format = formato
-                        FilmDataSource.films.add(film)
+                        viewModel.addFilm(film)
                         navController.previousBackStackEntry?.savedStateHandle?.set("key_result", "RESULT_OK")
                         navController.popBackStack()
                     }
@@ -249,13 +242,4 @@ fun FilmAddScreenContent(
             }
         }
     }
-}
-
-@Composable
-@Preview
-fun FilmAddScreenContentPreview() {
-    FilmAddScreenContent(
-        navController = NavHostController(context = LocalContext.current),
-        innerPadding = PaddingValues(0.dp),
-    )
 }

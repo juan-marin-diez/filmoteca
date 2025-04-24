@@ -1,10 +1,12 @@
-package app.is_mobile.filmoteca
+package app.is_mobile.filmoteca.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import app.is_mobile.filmoteca.navigation.Navigation
+import androidx.lifecycle.ViewModel
+import app.is_mobile.filmoteca.presentation.navigation.Navigation
+import app.is_mobile.filmoteca.presentation.viewmodel.FilmViewModel
 import app.is_mobile.filmoteca.ui.theme.FilmotecaTheme
 
 class MainActivity : ComponentActivity() {
@@ -12,9 +14,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            FilmotecaTheme {
-                Navigation()
-            }
+            val viewModel: ViewModel = FilmViewModel()
+            Navigation(viewModel = viewModel as FilmViewModel)
         }
     }
 }

@@ -1,4 +1,4 @@
-package app.is_mobile.filmoteca.navigation
+package app.is_mobile.filmoteca.presentation.navigation
 
 sealed class Screens (val route: String){
     object FilmList : Screens("home")

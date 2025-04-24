@@ -1,4 +1,4 @@
-package app.is_mobile.filmoteca.ui.screens
+package app.is_mobile.filmoteca.presentation.screens
 
 import android.content.Context
 import android.content.Intent
@@ -20,14 +20,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import app.is_mobile.filmoteca.R
-import app.is_mobile.filmoteca.data.DelFilm
-import app.is_mobile.filmoteca.data.Film
-import app.is_mobile.filmoteca.navigation.Screens
+import app.is_mobile.filmoteca.presentation.navigation.Screens
+import app.is_mobile.filmoteca.presentation.viewmodel.FilmViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -36,9 +34,10 @@ fun AppBar(
     showMenuButton: Boolean,
     navController: NavHostController,
     showDelButton: MutableState<Boolean>? = null,
-    selectedFilms: SnapshotStateList<Film>? = null
+    viewModel: FilmViewModel
 )
 {
+    val selectedFilms = viewModel.selectedFilms
     val context = LocalContext.current
     val visible: MutableState<Boolean> = remember { mutableStateOf(false) }
     TopAppBar(
@@ -71,11 +70,9 @@ fun AppBar(
                 }
             if (showDelButton?.value == true)
                 IconButton(onClick = {
-                    if (selectedFilms != null) {
-                        DelFilm(selectedFilms)
-                        showDelButton?.let { it.value = !it.value }
-                        navController.navigate(Screens.FilmList.route)
-                    }
+                    viewModel.deleteSelectedFilms(selectedFilms)
+                    showDelButton.let { it.value = !it.value }
+                    navController.navigate(Screens.FilmList.route)
                 }) {
                     Icon(
                         imageVector = Icons.Filled.Delete,

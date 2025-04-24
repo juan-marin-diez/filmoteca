@@ -1,4 +1,4 @@
-package app.is_mobile.filmoteca.ui.screens
+package app.is_mobile.filmoteca.presentation.screens
 
 import android.util.Log.e
 import android.util.Log.i
@@ -23,26 +23,27 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import app.is_mobile.filmoteca.data.Film
-import app.is_mobile.filmoteca.data.FilmDataSource
-import app.is_mobile.filmoteca.navigation.Screens
+import app.is_mobile.filmoteca.R
+import app.is_mobile.filmoteca.domain.model.Film
+import app.is_mobile.filmoteca.presentation.navigation.Screens
+import app.is_mobile.filmoteca.presentation.viewmodel.FilmViewModel
 
 @Composable
-fun FilmListScreen(navController: NavHostController) {
+fun FilmListScreen(navController: NavHostController, viewModel: FilmViewModel = FilmViewModel()) {
     val isActionMode = remember { mutableStateOf(false) }
-    val selectedFilms = remember { mutableStateListOf<Film>() }
+    val selectedFilms = viewModel.selectedFilms
+    val films by viewModel.films.collectAsState()
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -51,11 +52,11 @@ fun FilmListScreen(navController: NavHostController) {
                 showMenuButton = true,
                 navController = navController,
                 showDelButton = isActionMode,
-                selectedFilms = selectedFilms
+                viewModel = viewModel
             )
         },
     ) { innerPadding ->
-        FilmListScreenContent(navController, innerPadding, isActionMode, selectedFilms) }
+        FilmListScreenContent(navController, innerPadding, isActionMode, selectedFilms, films, viewModel) }
 }
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -64,7 +65,9 @@ fun FilmListScreenContent (
     navController: NavHostController,
     innerPadding: PaddingValues,
     isActionMode: MutableState<Boolean>,
-    selectedFilms: SnapshotStateList<Film>
+    selectedFilms: List<Film>,
+    films: List<Film>,
+    viewModel: FilmViewModel
 ) {
     when(navController.currentBackStackEntry?.savedStateHandle?.get<String>(key = "key_result"))
     {
@@ -78,30 +81,30 @@ fun FilmListScreenContent (
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.Start
     ) {
-        items(items = FilmDataSource.films)
+        items(films)
         { film ->
             Row(verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.combinedClickable(
                     onClick = { if( !isActionMode.value )
-                                    navController.navigate(Screens.FilmData.route + "/${FilmDataSource.films.indexOf(film)}")
+                                    navController.navigate(Screens.FilmData.route + "/${films.indexOf(film)}")
                                 else {
                                     if(selectedFilms.size==1&&selectedFilms.contains(film)) {
-                                        selectedFilms.clear()
+                                        viewModel.emptyFilmsToDelete()
                                         isActionMode.value = !isActionMode.value
                                     }
                                     else  if(selectedFilms.contains(film))
-                                        selectedFilms.remove(film)
+                                        viewModel.removeFilmToDelete(film)
                                     else
-                                        selectedFilms.add(film)
+                                        viewModel.addFilmToDelete(film)
                                 }
                               },
                     onClickLabel = "Ver datos de ${film.title}",
                     onLongClick = { if( !isActionMode.value ) {
                                         isActionMode.value = !isActionMode.value
-                                        selectedFilms.add(film)
+                                        viewModel.addFilmToDelete(film)
                                     }
                                     else {
-                                        selectedFilms.clear()
+                                        viewModel.emptyFilmsToDelete()
                                         isActionMode.value = !isActionMode.value
                                     }
                                   }
@@ -110,10 +113,16 @@ fun FilmListScreenContent (
                 Box(modifier = Modifier.padding(5.dp)
                     .fillMaxWidth(0.25f))
                 {
-                    Image(
-                        painter = painterResource(id = film.imageResId),
-                        contentDescription = "Cartel de ${film.title}"
-                    )
+                    if(film.image!=null)
+                        Image(
+                            bitmap = film.image!!.asImageBitmap(),
+                            contentDescription = "Cartel de ${film.title}",
+                        )
+                    else
+                        Image(
+                            painter = painterResource(id = R.drawable.filmoteca),
+                            contentDescription = "Cartel de ${film.title}",
+                        )
                     if(selectedFilms.contains(film))
                         Icon(
                             modifier = Modifier.align(Alignment.TopEnd),
@@ -130,15 +139,4 @@ fun FilmListScreenContent (
             }
         }
     }
-}
-
-@Preview
-@Composable
-fun PreviewFilmListScreen() {
-    FilmListScreenContent(
-        navController = NavHostController(LocalContext.current),
-        innerPadding = PaddingValues(5.dp),
-        isActionMode = remember { mutableStateOf(false) },
-        selectedFilms = remember { mutableStateListOf() }
-    )
 }

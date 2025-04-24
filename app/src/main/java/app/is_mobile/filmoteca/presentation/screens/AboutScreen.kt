@@ -1,4 +1,4 @@
-package app.is_mobile.filmoteca.ui.screens
+package app.is_mobile.filmoteca.presentation.screens
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -15,7 +15,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -28,10 +27,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import app.is_mobile.filmoteca.R
+import app.is_mobile.filmoteca.presentation.viewmodel.FilmViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun AboutScreen(navController: NavHostController) {
+fun AboutScreen(navController: NavHostController, viewModel: FilmViewModel) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -40,7 +40,7 @@ fun AboutScreen(navController: NavHostController) {
                 showMenuButton = false,
                 navController = navController,
                 showDelButton = remember { mutableStateOf(false) },
-                selectedFilms = remember { mutableStateListOf() }
+                viewModel = viewModel
             )
         },
     ) { AboutScreenContent(navController) }

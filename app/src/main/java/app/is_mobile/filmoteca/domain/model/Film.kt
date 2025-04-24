@@ -1,8 +1,10 @@
-package app.is_mobile.filmoteca.data;
+package app.is_mobile.filmoteca.domain.model;
+
+import android.graphics.Bitmap
 
 data class Film(
         var id: Int = 0,
-        var imageResId: Int = 0, // Propiedades de la clase
+        var image: Bitmap? = null, // Propiedades de la clase
         var title: String? = null,
         var director: String? = null,
         var year: Int = 0,
@@ -16,7 +18,7 @@ data class Film(
         return title ?: "<Sin título>"
     }
 
-    companion object {
+    /*companion object {
         const val  FORMAT_UNDEFINED = 0 // Formato no definido
         const val  GENRE_UNDEFINED = 0 // Género no definido
         const val FORMAT_DVD = 1 // Formatos
@@ -27,5 +29,5 @@ data class Film(
         const val GENRE_DRAMA = 3
         const val GENRE_SCIFI = 4
         const val GENRE_HORROR = 5
-    }
+    }*/
 }
